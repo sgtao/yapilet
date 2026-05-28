@@ -1,0 +1,27 @@
+[tools]
+python = "3.13"
+uv = "0.11"
+
+[tasks.install]
+description = "Install all workspace dependencies"
+run = "uv sync --all-packages"
+
+[tasks.check]
+description = "Run lint + type check + tests"
+run = "uv run ruff check . && uv run mypy core/src && uv run pytest"
+
+[tasks.test]
+description = "Run tests only"
+run = "uv run pytest"
+
+[tasks.lint]
+description = "Run ruff"
+run = "uv run ruff check ."
+
+[tasks.format]
+description = "Format with ruff"
+run = "uv run ruff format ."
+
+[tasks.test-cov]
+description = "Run tests with coverage report"
+run = "uv run pytest --cov=yapilet --cov-report=term-missing"
