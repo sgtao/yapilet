@@ -1,0 +1,9 @@
+name: echo_chain
+description: "Two-step echo chain — step 2 reads step 1's extracted result"
+steps:
+  - config: echo
+    inputs:
+      - "＜user_input_0＞"
+  - config: echo
+    inputs:
+      - "＜action_result_0＞"

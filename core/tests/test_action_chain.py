@@ -3,10 +3,8 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
-
 from yapilet.core.application.execute_action import ExecuteActionUseCase
 from yapilet.core.infrastructure.mock_adapter import MockAdapter
-from yapilet.core.models.action_chain import ActionChain, ActionStep
 from yapilet.core.services.config_loader import ConfigLoader
 
 
