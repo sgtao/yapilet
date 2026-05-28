@@ -5,6 +5,7 @@ from typing import Any
 
 import yaml
 
+from yapilet.core.models.action_chain import ActionChain, ActionStep
 from yapilet.core.models.api_request import ApiRequest
 
 
@@ -38,5 +39,29 @@ class ConfigLoader:
             headers=dict(raw.get("headers", {})),
             body=dict(raw.get("body", {})),
             response_path=raw.get("response_path"),
+            description=str(raw.get("description", "")),
+        )
+
+    @property
+    def actions_dir(self) -> Path:
+        return self._configs_dir / "actions"
+
+    def load_action(self, name: str) -> ActionChain:
+        """Load an action chain config by name and return ActionChain."""
+        path = self.actions_dir / f"{name}.yaml"
+        if not path.exists():
+            raise FileNotFoundError(f"Action config not found: {path}")
+        with path.open("r", encoding="utf-8") as f:
+            raw: dict[str, Any] = yaml.safe_load(f) or {}
+        steps = [
+            ActionStep(
+                config=str(s["config"]),
+                inputs=[str(i) for i in s.get("inputs", [])],
+            )
+            for s in raw.get("steps", [])
+        ]
+        return ActionChain(
+            name=raw.get("name", name),
+            steps=steps,
             description=str(raw.get("description", "")),
         )
