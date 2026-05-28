@@ -1,0 +1,75 @@
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+
+import click
+from yapilet.cli._di import load_action_chain, make_action_usecase, make_single_usecase
+
+
+@click.group()
+def cli() -> None:
+    """YAML-driven API request and action chain runner."""
+
+
+@cli.command()
+@click.argument("config_name")
+@click.option("--user-input", "user_inputs", multiple=True, help="User inputs (repeatable)")
+@click.option("--api-key", default=None, envvar="API_KEY", help="API key (or set API_KEY env var)")
+@click.option("--mock-echo", is_flag=True, help="Use MockAdapter — echo request offline")
+@click.option("--configs-dir", default="configs", type=click.Path(), help="Config directory")
+def single(
+    config_name: str,
+    user_inputs: tuple[str, ...],
+    api_key: str | None,
+    mock_echo: bool,
+    configs_dir: str,
+) -> None:
+    """Run a single API request config."""
+    uc = make_single_usecase(mock_echo=mock_echo, configs_dir=Path(configs_dir))
+    try:
+        result = uc.run(config_name, user_inputs=list(user_inputs), api_key=api_key)
+    except FileNotFoundError as e:
+        click.echo(f"[ERROR] {e}", err=True)
+        sys.exit(1)
+    if not result.is_success:
+        click.echo(f"[ERROR {result.status_code}] {result.error}", err=True)
+        sys.exit(1)
+    if result.extracted is not None:
+        click.echo(result.extracted)
+    else:
+        click.echo(json.dumps(result.body, ensure_ascii=False))
+
+
+@cli.command()
+@click.argument("chain_name")
+@click.option("--user-input", "user_inputs", multiple=True, help="User inputs (repeatable)")
+@click.option("--api-key", default=None, envvar="API_KEY", help="API key (or set API_KEY env var)")
+@click.option("--mock-echo", is_flag=True, help="Use MockAdapter — echo request offline")
+@click.option("--configs-dir", default="configs", type=click.Path(), help="Config directory")
+def action(
+    chain_name: str,
+    user_inputs: tuple[str, ...],
+    api_key: str | None,
+    mock_echo: bool,
+    configs_dir: str,
+) -> None:
+    """Run an action chain config."""
+    uc = make_action_usecase(mock_echo=mock_echo, configs_dir=Path(configs_dir))
+    try:
+        chain_cfg = load_action_chain(chain_name, Path(configs_dir))
+    except FileNotFoundError as e:
+        click.echo(f"[ERROR] {e}", err=True)
+        sys.exit(1)
+    results = uc.run(chain_name, user_inputs=list(user_inputs), api_key=api_key)
+    for i, (step, result) in enumerate(zip(chain_cfg.steps, results, strict=True), start=1):
+        if not result.is_success:
+            click.echo(f"[ERROR step {i}] {result.error}", err=True)
+            sys.exit(1)
+        value = (
+            result.extracted
+            if result.extracted is not None
+            else json.dumps(result.body, ensure_ascii=False)
+        )
+        click.echo(f"step {i} ({step.config}): {value}")
