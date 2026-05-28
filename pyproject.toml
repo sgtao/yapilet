@@ -1,7 +1,38 @@
 [project]
 name = "yapilet"
 version = "0.1.0"
-description = "A YAML-driven Python toolkit for API requests and action chaining"
+description = "YAML-driven API request and action-chain runner"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+
+[tool.uv.workspace]
+members = [
+    "packages/yapilet-core",
+]
+
+[tool.uv.sources]
+yapilet-core = { workspace = true }
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+    "mypy>=1.10",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+namespace_packages = true
+explicit_package_bases = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["packages/yapilet-core/src"]
