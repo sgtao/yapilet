@@ -20,10 +20,10 @@ def make_single_usecase(mock_echo: bool, configs_dir: Path) -> ExecuteSingleUseC
 
 
 def make_action_usecase(mock_echo: bool, configs_dir: Path) -> ExecuteActionUseCase:
-    """Create ExecuteActionUseCase with appropriate HTTP adapter."""
-    http_port = MockAdapter() if mock_echo else HttpxAdapter()
+    """Create ExecuteActionUseCase backed by a pre-configured ExecuteSingleUseCase."""
+    single = make_single_usecase(mock_echo=mock_echo, configs_dir=configs_dir)
     return ExecuteActionUseCase(
-        http_port=http_port,
+        single_usecase=single,
         config_loader=ConfigLoader(configs_dir),
     )
 

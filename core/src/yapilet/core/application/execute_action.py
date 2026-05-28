@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from yapilet.core.application.execute_single import ExecuteSingleUseCase
 from yapilet.core.models.result import Result
-from yapilet.core.ports.http_port import HttpPort
 from yapilet.core.services.config_loader import ConfigLoader
 from yapilet.core.services.placeholder import PlaceholderResolver
 
@@ -13,17 +12,13 @@ class ExecuteActionUseCase:
     def __init__(
         self,
         *,
-        http_port: HttpPort,
+        single_usecase: ExecuteSingleUseCase,
         config_loader: ConfigLoader,
         resolver: PlaceholderResolver | None = None,
     ) -> None:
         self._loader = config_loader
         self._resolver = resolver or PlaceholderResolver()
-        self._single = ExecuteSingleUseCase(
-            http_port=http_port,
-            config_loader=config_loader,
-            resolver=self._resolver,
-        )
+        self._single = single_usecase
 
     def run(
         self,
@@ -52,7 +47,6 @@ class ExecuteActionUseCase:
                 step.config,
                 user_inputs=resolved_inputs,
                 api_key=api_key,
-                action_results=extracted_so_far,
             )
             results.append(result)
 
