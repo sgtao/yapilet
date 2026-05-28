@@ -8,7 +8,7 @@ run = "uv sync"
 
 [tasks.check]
 description = "Run lint + type check + tests"
-run = "uv run ruff check . && uv run mypy packages && uv run pytest"
+run = "uv run ruff check . && uv run mypy core/src && uv run pytest"
 
 [tasks.test]
 description = "Run tests only"

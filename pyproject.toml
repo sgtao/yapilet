@@ -7,7 +7,7 @@ requires-python = ">=3.13"
 
 [tool.uv.workspace]
 members = [
-    "packages/yapilet-core",
+    "core",
 ]
 
 [tool.uv.sources]
@@ -34,5 +34,5 @@ namespace_packages = true
 explicit_package_bases = true
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
-pythonpath = ["packages/yapilet-core/src"]
+testpaths = ["core/tests"]
+pythonpath = ["core/src"]
