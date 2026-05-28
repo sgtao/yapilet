@@ -47,17 +47,27 @@ class ExecuteSingleUseCase:
         api_key: str | None,
         action_results: list[str] | None,
     ) -> ApiRequest:
-        kwargs = {
-            "user_inputs": user_inputs,
-            "action_results": action_results,
-            "api_key": api_key,
-        }
         return ApiRequest(
             name=template.name,
             method=template.method,
-            url=self._resolver.resolve(template.url, **kwargs),
-            headers=self._resolver.resolve_in_object(template.headers, **kwargs),
-            body=self._resolver.resolve_in_object(template.body, **kwargs),
+            url=self._resolver.resolve(
+                template.url,
+                user_inputs=user_inputs,
+                action_results=action_results,
+                api_key=api_key,
+            ),
+            headers=self._resolver.resolve_in_object(
+                template.headers,
+                user_inputs=user_inputs,
+                action_results=action_results,
+                api_key=api_key,
+            ),
+            body=self._resolver.resolve_in_object(
+                template.body,
+                user_inputs=user_inputs,
+                action_results=action_results,
+                api_key=api_key,
+            ),
             response_path=template.response_path,
             description=template.description,
         )

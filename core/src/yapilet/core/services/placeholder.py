@@ -4,7 +4,9 @@ import re
 from typing import Any
 
 _USER_INPUT_PATTERN = re.compile(r"[<＜]user_input_(\d+)[>＞]|\{\{\s*user_input_(\d+)\s*\}\}")
-_ACTION_RESULT_PATTERN = re.compile(r"[<＜]action_result_(\d+)[>＞]|\{\{\s*action_result_(\d+)\s*\}\}")
+_ACTION_RESULT_PATTERN = re.compile(
+    r"[<＜]action_result_(\d+)[>＞]|\{\{\s*action_result_(\d+)\s*\}\}"
+)
 _API_KEY_PATTERN = re.compile(r"[<＜]API_KEY[>＞]|\{\{\s*API_KEY\s*\}\}")
 _API_KEY_MASK = "***"
 
