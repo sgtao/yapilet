@@ -4,7 +4,7 @@ uv = "0.11"
 
 [tasks.install]
 description = "Install all workspace dependencies"
-run = "uv sync"
+run = "uv sync --all-packages"
 
 [tasks.check]
 description = "Run lint + type check + tests"
@@ -21,3 +21,7 @@ run = "uv run ruff check ."
 [tasks.format]
 description = "Format with ruff"
 run = "uv run ruff format ."
+
+[tasks.test-cov]
+description = "Run tests with coverage report"
+run = "uv run pytest --cov=yapilet --cov-report=term-missing"
