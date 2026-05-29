@@ -1,0 +1,30 @@
+# 101_explain_with_fineman_technique.yaml
+title: Groq explain word with fineman technique
+note: |
+  - Grop API（gpt-oss）を使って、`user_input_0`の内容を解説させる
+single_config:
+  header_df:
+  - Property: Content-Type
+    Value: application/json
+  - Property: Authorization
+    Value: Bearer ＜API_KEY＞
+  method: POST
+  req_body:
+    # model: "llama-3.3-70b-versatile"
+    # model: "meta-llama/llama-4-scout-17b-16e-instruct"
+    model: "openai/gpt-oss-20b"
+    messages:
+      - role: "system"
+        content: "ユーザーのメッセージをファインマンテクニックで解説して下さい。
+          ## 出力様式：
+          下の箇条書きの内容をMarkdown形式のセクションタイトルとして解説
+          `（...）`内は記載ルールを書いてます。
+          - 01. 要約（200文字以内で要約。ユーザーメッセージが少ない場合はここで完結）
+          - 02. 例え話（中学生がイメージつくストーリーを400文字以内で表現）
+          - 03. 解説（ユーザーメッセージの情報を維持した上で、箇条書きや表を交えて解説。800文字以内）
+          "
+      - role: "user"
+        content: "＜user_input_0＞"
+  uri: https://api.groq.com/openai/v1/chat/completions
+  use_dynamic_inputs: true
+  user_property_path: choices[0].message.content

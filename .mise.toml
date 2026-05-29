@@ -28,8 +28,8 @@ run = "uv run pytest --cov=yapilet --cov-report=term-missing"
 
 [tasks."cli:single"]
 description = "CLI smoke test — single request with mock-echo"
-run = "uv run yapilet single echo --user-input hello --mock-echo"
+run = "uv run yapilet single configs/singles/echo.yaml --user-input hello --mock-echo"
 
 [tasks."cli:action"]
 description = "CLI smoke test — action chain with mock-echo"
-run = "uv run yapilet action echo_chain --user-input hello --mock-echo"
+run = "uv run yapilet action configs/actions/echo_chain.yaml --user-input hello --mock-echo"

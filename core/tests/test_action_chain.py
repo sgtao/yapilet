@@ -4,11 +4,9 @@ from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
-
 from yapilet.core.application.execute_action import ExecuteActionUseCase
 from yapilet.core.application.execute_single import ExecuteSingleUseCase
 from yapilet.core.infrastructure.mock_adapter import MockAdapter
-from yapilet.core.models.action_chain import ActionChain, ActionStep
 from yapilet.core.models.result import Result
 from yapilet.core.services.config_loader import ConfigLoader
 
@@ -96,7 +94,11 @@ action_config:
 """.strip(),
     )
     uc = _make_uc(tmp_path)
-    results = uc.run(str(tmp_path / "actions" / "single.yaml"), user_inputs=["hello"], api_key="sk-demo")
+    results = uc.run(
+        str(tmp_path / "actions" / "single.yaml"),
+        user_inputs=["hello"],
+        api_key="sk-demo",
+    )
     assert len(results) == 1
     assert results[0].is_success
     assert results[0].extracted == "hello"
@@ -120,7 +122,11 @@ action_config:
 """.strip(),
     )
     uc = _make_uc(tmp_path)
-    results = uc.run(str(tmp_path / "actions" / "chain.yaml"), user_inputs=["hello"], api_key="sk-demo")
+    results = uc.run(
+        str(tmp_path / "actions" / "chain.yaml"),
+        user_inputs=["hello"],
+        api_key="sk-demo",
+    )
     assert len(results) == 2
     assert results[0].extracted == "hello"
     assert results[1].extracted == "hello"
@@ -173,7 +179,11 @@ action_config:
         single_usecase=mock_single,
         config_loader=ConfigLoader(),
     )
-    results = uc.run(str(tmp_path / "actions" / "chain.yaml"), user_inputs=["hello"], api_key="sk-demo")
+    results = uc.run(
+        str(tmp_path / "actions" / "chain.yaml"),
+        user_inputs=["hello"],
+        api_key="sk-demo",
+    )
 
     assert len(results) == 2
     assert mock_single.run.call_count == 2
