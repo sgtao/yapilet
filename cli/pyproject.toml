@@ -1,8 +1,20 @@
 [project]
 name = "yapilet-cli"
 version = "0.1.0"
-description = "yapilet CLI entry point"
+description = "YAML-driven API request and action chain — CLI"
 requires-python = ">=3.13"
+license = "Apache-2.0"
+authors = [
+    { name = "Shogo Ogami", email = "sg.tao.so@gmail.com" },
+]
+keywords = ["api", "yaml", "http", "cli", "automation"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Utilities",
+]
 dependencies = [
     "yapilet-core",
     "click>=8.0",
