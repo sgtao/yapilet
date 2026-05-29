@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 from yapilet.core.application.execute_single import ExecuteSingleUseCase
 from yapilet.core.models.result import Result
 from yapilet.core.services.config_loader import ConfigLoader
@@ -22,13 +24,13 @@ class ExecuteActionUseCase:
 
     def run(
         self,
-        action_name: str,
+        action_path: str | Path,
         *,
         user_inputs: list[str] | None = None,
         api_key: str | None = None,
     ) -> list[Result]:
         """Execute all steps in the named action chain and return their Results."""
-        chain = self._loader.load_action(action_name)
+        chain = self._loader.load_action(Path(action_path))
         inputs = user_inputs or []
         results: list[Result] = []
 

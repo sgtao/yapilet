@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 from yapilet.core.models.api_request import ApiRequest
 from yapilet.core.models.result import Result
 from yapilet.core.ports.http_port import HttpPort
@@ -24,13 +26,13 @@ class ExecuteSingleUseCase:
 
     def run(
         self,
-        config_name: str,
+        config_path: str | Path,
         *,
         user_inputs: list[str] | None = None,
         api_key: str | None = None,
         action_results: list[str] | None = None,  # reserved for Phase 1.5
     ) -> Result:
-        template = self._loader.load_single(config_name)
+        template = self._loader.load_single(Path(config_path))
         resolved = self._expand(
             template,
             user_inputs=user_inputs,
