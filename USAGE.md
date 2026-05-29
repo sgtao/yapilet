@@ -1,18 +1,18 @@
-# yapilet 使い方ガイド
+# yapilet Usage Guide
 
 ---
 
-## YAML 設定ファイルの書き方
+## YAML Configuration Files
 
-設定ファイルは `configs/` 以下に置きます。
+Place configuration files under `configs/`.
 
-### 単発リクエスト（`configs/singles/*.yaml`）
+### Single Request (`configs/singles/*.yaml`)
 
 ```yaml
 title: "001_get_simple_api_test"
 note: |
-  - dummyjson.com の商品情報を取得する
-  - response_path で最後のタグを抽出
+  - Fetch product info from dummyjson.com
+  - Extract the last tag with response_path
 single_config:
   method: GET
   url: "https://dummyjson.com/products/1"
@@ -21,23 +21,23 @@ single_config:
   response_path: "tags[-1]"
 ```
 
-| フィールド | 説明 |
+| Field | Description |
 |---|---|
-| `title:` | 設定の名前 |
-| `note:` | Markdown で自由に記述できる説明 |
+| `title:` | Config name |
+| `note:` | Free-form Markdown description |
 | `method:` | `GET` / `POST` / `PUT` / `DELETE` |
-| `url:` | リクエスト先 URL（`＜API_KEY＞` などのプレースホルダー使用可） |
-| `headers:` | リクエストヘッダー（dict 形式） |
-| `body:` | リクエストボディ（dict 形式） |
-| `response_path:` | jmespath 式でレスポンスから値を抽出 |
+| `url:` | Request URL (placeholders like `＜API_KEY＞` are supported) |
+| `headers:` | Request headers (dict format) |
+| `body:` | Request body (dict format) |
+| `response_path:` | jmespath expression to extract a value from the response |
 
-### アクションチェーン（`configs/actions/*.yaml`）
+### Action Chain (`configs/actions/*.yaml`)
 
-複数のリクエストを順番に実行し、前のステップの結果を次のステップに渡します。
+Run multiple requests in sequence, passing each step's result to the next.
 
 ```yaml
 title: "echo_chain"
-note: "2 ステップのチェーン — step 2 が step 1 の結果を受け取る"
+note: "Two-step chain — step 2 receives step 1's extracted result"
 action_config:
   steps:
     - config: "configs/singles/echo.yaml"
@@ -48,83 +48,92 @@ action_config:
         - "＜action_result_0＞"
 ```
 
-### プレースホルダー一覧
+### Placeholders
 
-| プレースホルダー | エイリアス | 意味 |
+| Placeholder | Alias | Meaning |
 |---|---|---|
-| `＜user_input_N＞` | `{{user_input_N}}` | N 番目のユーザー入力（0-indexed） |
-| `＜action_result_N＞` | `{{action_result_N}}` | N 番目のステップの抽出結果 |
-| `＜API_KEY＞` | `{{API_KEY}}` | API キー（実行時に置換） |
+| `＜user_input_N＞` | `{{user_input_N}}` | N-th user input (0-indexed) |
+| `＜action_result_N＞` | `{{action_result_N}}` | Extracted result of step N |
+| `＜API_KEY＞` | `{{API_KEY}}` | API key (substituted at runtime) |
+
+### Legacy Field Aliases (inside `single_config:`)
+
+| Canonical | Legacy alias |
+|---|---|
+| `url:` | `uri:` |
+| `body:` | `req_body:` |
+| `headers:` (dict) | `header_df:` (list of `{Property, Value}`) |
+| `response_path:` | `user_property_path:` |
 
 ---
 
-## CLI での使い方
+## CLI Usage
 
-### 単発リクエスト
+### Single Request
 
 ```bash
-yapilet single <設定ファイルのパス> [オプション]
+yapilet single <path-to-yaml> [OPTIONS]
 ```
 
 ```bash
-# 実際に HTTP リクエストを送る
+# Send a real HTTP request
 yapilet single configs/singles/001_get_simple_api_test.yaml
 
-# API キーを指定
+# Pass an API key
 yapilet single configs/singles/myapi.yaml --api-key sk-xxx
 
-# 複数のユーザー入力を渡す
+# Pass multiple user inputs
 yapilet single configs/singles/explain.yaml \
-  --user-input "機械学習" \
+  --user-input "machine learning" \
   --api-key sk-xxx
 
-# --mock-echo: 実際の HTTP を送らず、リクエスト内容を echo して返す（動作確認用）
+# --mock-echo: no real HTTP sent; echoes request as response (for testing)
 yapilet single configs/singles/echo.yaml --user-input hello --mock-echo
 ```
 
-### アクションチェーン
+### Action Chain
 
 ```bash
-yapilet action <設定ファイルのパス> [オプション]
+yapilet action <path-to-yaml> [OPTIONS]
 ```
 
 ```bash
-# 2 ステップのチェーンを実行
+# Run a two-step chain
 yapilet action configs/actions/echo_chain.yaml --user-input hello --mock-echo
 ```
 
-出力例：
+Output:
 ```
 step 1 (echo): hello
 step 2 (echo): hello
 ```
 
-### オプション一覧
+### Options
 
-| オプション | 説明 |
+| Option | Description |
 |---|---|
-| `--user-input TEXT` | ユーザー入力（複数回指定可） |
-| `--api-key TEXT` | API キー（省略時は `API_KEY` 環境変数） |
-| `--mock-echo` | MockAdapter 使用（HTTP を送らずリクエストを echo） |
+| `--user-input TEXT` | User input (repeatable) |
+| `--api-key TEXT` | API key (falls back to `API_KEY` env var) |
+| `--mock-echo` | Use MockAdapter — echo request offline |
 
-### API キーを環境変数で渡す
+### API Key via Environment Variable
 
 ```bash
 export API_KEY=sk-xxxxxxxxxxxx
-yapilet single configs/singles/myapi.yaml --user-input "機械学習"
+yapilet single configs/singles/myapi.yaml --user-input "machine learning"
 ```
 
 ---
 
-## ライブラリとして使う
+## Library Usage
 
-Python コードから直接 use case を呼び出せます。
+Call use cases directly from Python code.
 
-### 単発リクエスト
+### Single Request
 
 ```python
 from yapilet.core.application.execute_single import ExecuteSingleUseCase
-from yapilet.core.infrastructure.mock_adapter import MockAdapter  # 本番は HttpxAdapter
+from yapilet.core.infrastructure.mock_adapter import MockAdapter  # Use HttpxAdapter in production
 from yapilet.core.services.config_loader import ConfigLoader
 
 uc = ExecuteSingleUseCase(
@@ -143,7 +152,7 @@ print(result.is_success)  # → True
 print(result.status_code) # → 200
 ```
 
-### アクションチェーン
+### Action Chain
 
 ```python
 from yapilet.core.application.execute_action import ExecuteActionUseCase
@@ -170,12 +179,12 @@ for i, r in enumerate(results, start=1):
     print(f"step {i}: extracted={r.extracted}, success={r.is_success}")
 ```
 
-### Result オブジェクトのフィールド
+### Result Object Fields
 
-| フィールド | 型 | 説明 |
+| Field | Type | Description |
 |---|---|---|
-| `status_code` | `int` | HTTP ステータスコード |
-| `is_success` | `bool` | 200〜299 なら `True` |
-| `extracted` | `Any` | `response_path` で抽出した値 |
-| `body` | `Any` | レスポンス全体 |
-| `error` | `str \| None` | エラーメッセージ（成功時は `None`） |
+| `status_code` | `int` | HTTP status code |
+| `is_success` | `bool` | `True` if 200–299 |
+| `extracted` | `Any` | Value extracted by `response_path` |
+| `body` | `Any` | Full response body |
+| `error` | `str \| None` | Error message (None on success) |
