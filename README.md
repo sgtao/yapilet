@@ -1,40 +1,42 @@
 # yapilet
 
-YAML ファイルで API リクエストとアクションチェーンを定義・実行する Python ツールキット。
-ライブラリ・CLI・GUI・API サーバーとして利用できます。
+A YAML-driven Python toolkit for API requests and action chaining.
+Available as a library, CLI, GUI, or API server.
 
 ---
 
-## インストール
+## Installation
 
 ```bash
-# リポジトリを clone して依存関係をインストール
 git clone <repo-url>
 cd yapilet
-mise install        # Python 3.13 + uv のセットアップ
-mise run install    # 依存関係のインストール
+mise install        # Set up Python 3.13 + uv
+mise run install    # Install dependencies
 ```
 
 ---
 
-詳しい使い方は **[USAGE.md](USAGE.md)** を参照してください。
+For detailed usage, see **[USAGE.md](USAGE.md)**.
+
+Japanese documentation: [README.ja.md](README.ja.md) / [USAGE.ja.md](USAGE.ja.md)
 
 ---
 
-## 開発コマンド
+## Development Commands
 
 ```bash
-mise run test       # テスト実行
-mise run test-cov   # カバレッジ付きテスト
-mise run lint       # ruff によるリント
-mise run format     # ruff によるフォーマット
-mise run check      # lint + mypy + test の一括実行
-mise run cli:single # CLI スモークテスト（single）
-mise run cli:action # CLI スモークテスト（action）
+mise run test       # Run tests
+mise run test-cov   # Run tests with coverage
+mise run lint       # Lint with ruff
+mise run format     # Format with ruff
+mise run check      # lint + mypy + test
+mise run build      # Build wheels (dist/)
+mise run cli:single # CLI smoke test (single request)
+mise run cli:action # CLI smoke test (action chain)
 ```
 
 ---
 
-## ライセンス
+## License
 
 [Apache License 2.0](LICENSE)
