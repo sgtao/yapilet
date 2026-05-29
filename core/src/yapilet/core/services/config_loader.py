@@ -4,7 +4,6 @@ from pathlib import Path
 from typing import Any
 
 import yaml
-
 from yapilet.core.models.action_chain import ActionChain, ActionStep
 from yapilet.core.models.api_request import ApiRequest
 

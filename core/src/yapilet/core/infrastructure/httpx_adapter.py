@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 import httpx
-
 from yapilet.core.models.api_request import ApiRequest
 from yapilet.core.ports.http_port import HttpPort, RawResponse
 

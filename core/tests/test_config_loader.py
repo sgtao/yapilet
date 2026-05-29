@@ -3,7 +3,6 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
-
 from yapilet.core.services.config_loader import ConfigLoader
 
 

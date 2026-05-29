@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import jmespath
-
 from yapilet.core.models.api_request import ApiRequest
 from yapilet.core.models.result import Result
 from yapilet.core.ports.http_port import HttpPort
