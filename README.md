@@ -40,3 +40,7 @@ mise run cli:action # CLI smoke test (action chain)
 ## License
 
 [Apache License 2.0](LICENSE)
+
+---
+
+🤖 Built with [Claude Code](https://claude.com/claude-code)
