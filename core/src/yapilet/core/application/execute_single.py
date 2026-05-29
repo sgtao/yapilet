@@ -48,7 +48,7 @@ class ExecuteSingleUseCase:
         action_results: list[str] | None,
     ) -> ApiRequest:
         return ApiRequest(
-            name=template.name,
+            title=template.title,
             method=template.method,
             url=self._resolver.resolve(
                 template.url,
@@ -69,5 +69,5 @@ class ExecuteSingleUseCase:
                 api_key=api_key,
             ),
             response_path=template.response_path,
-            description=template.description,
+            note=template.note,
         )

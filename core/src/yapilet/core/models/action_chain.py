@@ -5,9 +5,9 @@ from dataclasses import dataclass, field
 
 @dataclass(frozen=True)
 class ActionStep:
-    """One step in an action chain: which single config to run and its input placeholders."""
+    """One step in an action chain: which config path to run and its input placeholders."""
 
-    config: str
+    config: str  # relative path to single config (e.g. "configs/singles/echo.yaml")
     inputs: list[str] = field(default_factory=list)
 
 
@@ -15,6 +15,6 @@ class ActionStep:
 class ActionChain:
     """A named sequence of ActionStep definitions."""
 
-    name: str
+    title: str
     steps: list[ActionStep]
-    description: str = ""
+    note: str = ""
