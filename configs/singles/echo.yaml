@@ -1,10 +1,11 @@
-name: echo
-description: "Mock-friendly echo request for smoke testing"
-method: POST
-url: "https://example.com/echo"
-headers:
-  Authorization: "Bearer ＜API_KEY＞"
-  Content-Type: "application/json"
-body:
-  message: "＜user_input_0＞"
-response_path: "echo.body.message"
+title: "echo"
+note: "Mock-friendly echo request for smoke testing"
+single_config:
+  method: POST
+  url: "https://example.com/echo"
+  headers:
+    Authorization: "Bearer ＜API_KEY＞"
+    Content-Type: "application/json"
+  body:
+    message: "＜user_input_0＞"
+  response_path: "echo.body.message"

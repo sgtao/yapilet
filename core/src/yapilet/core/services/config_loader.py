@@ -4,64 +4,71 @@ from pathlib import Path
 from typing import Any
 
 import yaml
-
 from yapilet.core.models.action_chain import ActionChain, ActionStep
 from yapilet.core.models.api_request import ApiRequest
 
 
 class ConfigLoader:
-    """Loads YAML configs under configs/singles/ into ApiRequest models."""
+    """Loads YAML configs by path into domain models."""
 
-    def __init__(self, configs_dir: Path) -> None:
-        self._configs_dir = configs_dir
+    def __init__(self, configs_dir: Path | None = None) -> None:
+        self._configs_dir = configs_dir  # reserved for GUI list_singles()
 
-    @property
-    def singles_dir(self) -> Path:
-        return self._configs_dir / "singles"
-
-    def list_singles(self) -> list[str]:
-        """Return sorted names of available single configs (filename stems)."""
-        if not self.singles_dir.exists():
-            return []
-        return sorted(p.stem for p in self.singles_dir.glob("*.yaml"))
-
-    def load_single(self, name: str) -> ApiRequest:
-        """Load a single config by name (filename stem) and return ApiRequest."""
-        path = self.singles_dir / f"{name}.yaml"
+    def load_single(self, path: Path) -> ApiRequest:
+        """Load a single_config YAML at `path` and return ApiRequest."""
         if not path.exists():
             raise FileNotFoundError(f"Single config not found: {path}")
         with path.open("r", encoding="utf-8") as f:
             raw: dict[str, Any] = yaml.safe_load(f) or {}
+
+        title = str(raw.get("title", path.stem))
+        note = str(raw.get("note", ""))
+        cfg: dict[str, Any] = raw.get("single_config", {})
+
         return ApiRequest(
-            name=raw.get("name", name),
-            method=str(raw.get("method", "GET")).upper(),
-            url=str(raw.get("url", "")),
-            headers=dict(raw.get("headers", {})),
-            body=dict(raw.get("body", {})),
-            response_path=raw.get("response_path"),
-            description=str(raw.get("description", "")),
+            title=title,
+            note=note,
+            method=str(cfg.get("method", "GET")).upper(),
+            url=str(cfg.get("url") or cfg.get("uri", "")),
+            headers=self._parse_headers(cfg),
+            body=dict(cfg.get("body") or cfg.get("req_body") or {}),
+            response_path=cfg.get("response_path") or cfg.get("user_property_path"),
         )
 
-    @property
-    def actions_dir(self) -> Path:
-        return self._configs_dir / "actions"
-
-    def load_action(self, name: str) -> ActionChain:
-        """Load an action chain config by name and return ActionChain."""
-        path = self.actions_dir / f"{name}.yaml"
+    def load_action(self, path: Path) -> ActionChain:
+        """Load an action_config YAML at `path` and return ActionChain."""
         if not path.exists():
             raise FileNotFoundError(f"Action config not found: {path}")
         with path.open("r", encoding="utf-8") as f:
             raw: dict[str, Any] = yaml.safe_load(f) or {}
+
+        title = str(raw.get("title", path.stem))
+        note = str(raw.get("note", ""))
+        cfg: dict[str, Any] = raw.get("action_config", {})
         steps = [
             ActionStep(
                 config=str(s["config"]),
                 inputs=[str(i) for i in s.get("inputs", [])],
             )
-            for s in raw.get("steps", [])
+            for s in cfg.get("steps", [])
         ]
-        return ActionChain(
-            name=raw.get("name", name),
-            steps=steps,
-            description=str(raw.get("description", "")),
-        )
+        return ActionChain(title=title, steps=steps, note=note)
+
+    @staticmethod
+    def _parse_headers(cfg: dict[str, Any]) -> dict[str, str]:
+        """Support both headers: dict and header_df: list formats."""
+        if "headers" in cfg:
+            return dict(cfg["headers"])
+        if "header_df" in cfg:
+            return {str(item["Property"]): str(item["Value"]) for item in cfg["header_df"]}
+        return {}
+
+    @property
+    def singles_dir(self) -> Path | None:
+        return self._configs_dir / "singles" if self._configs_dir else None
+
+    def list_singles(self) -> list[str]:
+        """Return sorted stems for GUI file browser (requires configs_dir)."""
+        if not self.singles_dir or not self.singles_dir.exists():
+            return []
+        return sorted(p.stem for p in self.singles_dir.glob("*.yaml"))

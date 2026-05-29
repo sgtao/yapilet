@@ -1,9 +1,10 @@
-name: echo_chain
-description: "Two-step echo chain — step 2 reads step 1's extracted result"
-steps:
-  - config: echo
-    inputs:
-      - "＜user_input_0＞"
-  - config: echo
-    inputs:
-      - "＜action_result_0＞"
+title: "echo_chain"
+note: "Two-step echo chain — step 2 reads step 1's extracted result"
+action_config:
+  steps:
+    - config: "configs/singles/echo.yaml"
+      inputs:
+        - "＜user_input_0＞"
+    - config: "configs/singles/echo.yaml"
+      inputs:
+        - "＜action_result_0＞"

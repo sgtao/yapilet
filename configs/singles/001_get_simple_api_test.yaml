@@ -1,0 +1,8 @@
+title: "001_get_simple_api_test"
+note: "dummyjson.com へのアクセス"
+single_config:
+  method: GET
+  url: "https://dummyjson.com/products/1"
+  headers:
+    Content-Type: "application/json"
+  response_path: "tags[-1]"
