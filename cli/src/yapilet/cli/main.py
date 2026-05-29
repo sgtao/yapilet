@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 
 import click
+
 from yapilet.cli._di import load_action_chain, make_action_usecase, make_single_usecase
 
 
@@ -14,22 +15,20 @@ def cli() -> None:
 
 
 @cli.command()
-@click.argument("config_name")
+@click.argument("config_path", type=click.Path())
 @click.option("--user-input", "user_inputs", multiple=True, help="User inputs (repeatable)")
 @click.option("--api-key", default=None, envvar="API_KEY", help="API key (or set API_KEY env var)")
 @click.option("--mock-echo", is_flag=True, help="Use MockAdapter — echo request offline")
-@click.option("--configs-dir", default="configs", type=click.Path(), help="Config directory")
 def single(
-    config_name: str,
+    config_path: str,
     user_inputs: tuple[str, ...],
     api_key: str | None,
     mock_echo: bool,
-    configs_dir: str,
 ) -> None:
-    """Run a single API request config."""
-    uc = make_single_usecase(mock_echo=mock_echo, configs_dir=Path(configs_dir))
+    """Run a single API request config (relative path to .yaml file)."""
+    uc = make_single_usecase(mock_echo=mock_echo)
     try:
-        result = uc.run(config_name, user_inputs=list(user_inputs), api_key=api_key)
+        result = uc.run(config_path, user_inputs=list(user_inputs), api_key=api_key)
     except FileNotFoundError as e:
         click.echo(f"[ERROR] {e}", err=True)
         sys.exit(1)
@@ -43,26 +42,24 @@ def single(
 
 
 @cli.command()
-@click.argument("chain_name")
+@click.argument("chain_path", type=click.Path())
 @click.option("--user-input", "user_inputs", multiple=True, help="User inputs (repeatable)")
 @click.option("--api-key", default=None, envvar="API_KEY", help="API key (or set API_KEY env var)")
 @click.option("--mock-echo", is_flag=True, help="Use MockAdapter — echo request offline")
-@click.option("--configs-dir", default="configs", type=click.Path(), help="Config directory")
 def action(
-    chain_name: str,
+    chain_path: str,
     user_inputs: tuple[str, ...],
     api_key: str | None,
     mock_echo: bool,
-    configs_dir: str,
 ) -> None:
-    """Run an action chain config."""
-    uc = make_action_usecase(mock_echo=mock_echo, configs_dir=Path(configs_dir))
+    """Run an action chain config (relative path to .yaml file)."""
+    uc = make_action_usecase(mock_echo=mock_echo)
     try:
-        chain_cfg = load_action_chain(chain_name, Path(configs_dir))
+        chain_cfg = load_action_chain(Path(chain_path))
+        results = uc.run(chain_path, user_inputs=list(user_inputs), api_key=api_key)
     except FileNotFoundError as e:
         click.echo(f"[ERROR] {e}", err=True)
         sys.exit(1)
-    results = uc.run(chain_name, user_inputs=list(user_inputs), api_key=api_key)
     for i, (step, result) in enumerate(zip(chain_cfg.steps, results, strict=True), start=1):
         if not result.is_success:
             click.echo(f"[ERROR step {i}] {result.error}", err=True)
@@ -72,4 +69,4 @@ def action(
             if result.extracted is not None
             else json.dumps(result.body, ensure_ascii=False)
         )
-        click.echo(f"step {i} ({step.config}): {value}")
+        click.echo(f"step {i} ({Path(step.config).stem}): {value}")
