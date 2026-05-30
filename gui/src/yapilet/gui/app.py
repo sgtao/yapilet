@@ -53,7 +53,7 @@ def main(page: ft.Page) -> None:
 
     nav_bar = ft.Container(
         content=ft.Row(nav_buttons, alignment=ft.MainAxisAlignment.START),
-        bgcolor=ft.Colors.SURFACE_VARIANT,
+        bgcolor=ft.Colors.GREY_200,
         padding=ft.padding.Padding(left=8, top=4, right=8, bottom=4),
         border_radius=ft.border_radius.BorderRadius(
             top_left=8, top_right=8, bottom_left=0, bottom_right=0
