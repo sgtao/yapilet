@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from yapilet.core.application.execute_action import ExecuteActionUseCase
+from yapilet.core.application.execute_chat import ExecuteChatUseCase
 from yapilet.core.application.execute_single import ExecuteSingleUseCase
 from yapilet.core.infrastructure.httpx_adapter import HttpxAdapter
 from yapilet.core.infrastructure.mock_adapter import MockAdapter
@@ -31,3 +32,12 @@ def make_action_usecase(mock_echo: bool) -> ExecuteActionUseCase:
 def load_action_chain(action_path: Path) -> ActionChain:
     """Load an action chain config for display purposes."""
     return ConfigLoader().load_action(action_path)
+
+
+def make_chat_usecase(mock_echo: bool) -> ExecuteChatUseCase:
+    """Create ExecuteChatUseCase with appropriate HTTP adapter."""
+    http_port = MockAdapter() if mock_echo else HttpxAdapter()
+    return ExecuteChatUseCase(
+        http_port=http_port,
+        config_loader=ConfigLoader(),
+    )

@@ -166,3 +166,40 @@ def test_action_step_error_exits_nonzero(configs_dir: Path) -> None:
             ["action", str(configs_dir / "actions" / "echo_chain.yaml"), "--mock-echo"],
         )
     assert result.exit_code != 0
+
+
+def test_chat_mock_echo_single_turn(tmp_path: Path) -> None:
+    p = tmp_path / "chat.yaml"
+    p.write_text(
+        """
+title: test_chat
+single_config:
+  method: POST
+  url: "https://example.com/v1/chat/completions"
+  body:
+    model: "test-model"
+    messages:
+      - role: "system"
+        content: "You are helpful."
+  response_path: "echo.body.messages[-1].content"
+""".strip(),
+        encoding="utf-8",
+    )
+    runner = CliRunner()
+    result = runner.invoke(
+        cli,
+        ["chat", str(p), "--mock-echo"],
+        input="hello\nexit\n",
+    )
+    assert result.exit_code == 0
+    assert "hello" in result.output
+
+
+def test_chat_missing_config_exits_nonzero(tmp_path: Path) -> None:
+    runner = CliRunner()
+    result = runner.invoke(
+        cli,
+        ["chat", str(tmp_path / "nope.yaml"), "--mock-echo"],
+        input="exit\n",
+    )
+    assert result.exit_code != 0
