@@ -56,3 +56,15 @@ def test_resolve_in_object_nested_dict() -> None:
 def test_mask_api_key() -> None:
     out = PlaceholderResolver.mask_api_key("Authorization: Bearer sk-secret", "sk-secret")
     assert out == "Authorization: Bearer ***"
+
+
+def test_resolve_in_object_list() -> None:
+    r = PlaceholderResolver()
+    template = ["＜user_input_0＞", "static", "＜API_KEY＞", 42]
+    out = r.resolve_in_object(template, user_inputs=["hello"], api_key="K")
+    assert out == ["hello", "static", "K", 42]
+
+
+def test_mask_api_key_empty_string_returns_unchanged() -> None:
+    out = PlaceholderResolver.mask_api_key("Authorization: Bearer sk-secret", "")
+    assert out == "Authorization: Bearer sk-secret"
