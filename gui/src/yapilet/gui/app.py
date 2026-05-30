@@ -5,6 +5,7 @@ from typing import cast
 import flet as ft
 from yapilet.gui.app_store import AppStore
 from yapilet.gui.pages.settings_page import SettingsPage
+from yapilet.gui.pages.single_page import SinglePage
 
 
 class _PlaceholderPage(ft.Column):
@@ -30,7 +31,7 @@ def main(page: ft.Page) -> None:
     store = AppStore()
 
     pages: list[ft.Control] = [
-        _PlaceholderPage("Single Request"),  # Task 4 で置き換え
+        SinglePage(store),  # Task 4
         _PlaceholderPage("Chat"),  # Task 6 で置き換え
         _PlaceholderPage("Action"),  # Task 5 で置き換え
         SettingsPage(store),
