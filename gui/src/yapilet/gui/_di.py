@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from yapilet.core.application.execute_action import ExecuteActionUseCase
-from yapilet.core.application.execute_chat import ExecuteChatUseCase
+from yapilet.core.application.execute_chat import ExecuteChatUseCase as ExecuteChatUseCase
 from yapilet.core.application.execute_single import ExecuteSingleUseCase
 from yapilet.core.infrastructure.httpx_adapter import HttpxAdapter
 from yapilet.core.infrastructure.mock_adapter import MockAdapter

@@ -5,22 +5,9 @@ from typing import cast
 import flet as ft
 from yapilet.gui.app_store import AppStore
 from yapilet.gui.pages.action_page import ActionPage
+from yapilet.gui.pages.chat_page import ChatPage
 from yapilet.gui.pages.settings_page import SettingsPage
 from yapilet.gui.pages.single_page import SinglePage
-
-
-class _PlaceholderPage(ft.Column):
-    """Task 3: Settings 以外のページが実装されるまでの仮ページ。"""
-
-    def __init__(self, label: str) -> None:
-        super().__init__(expand=True)
-        self.controls = [
-            ft.Container(
-                content=ft.Text(f"{label} — Coming soon", size=18, color=ft.Colors.GREY_500),
-                alignment=ft.alignment.Alignment(0, 0),
-                expand=True,
-            )
-        ]
 
 
 def main(page: ft.Page) -> None:
@@ -33,7 +20,7 @@ def main(page: ft.Page) -> None:
 
     pages: list[ft.Control] = [
         SinglePage(store),  # Task 4
-        _PlaceholderPage("Chat"),  # Task 6 で置き換え
+        ChatPage(store),  # Task 6
         ActionPage(store),  # Task 5
         SettingsPage(store),
     ]
