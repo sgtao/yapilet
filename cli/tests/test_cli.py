@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 from pathlib import Path
+from unittest.mock import MagicMock, patch
 
 import pytest
 from click.testing import CliRunner
 from yapilet.cli.main import cli
+from yapilet.core.models.result import Result
 
 
 @pytest.fixture()
@@ -120,3 +122,47 @@ def test_api_key_passed_to_usecase(configs_dir: Path) -> None:
     )
     assert result.exit_code == 0
     assert result.output.strip() == "hello"
+
+
+def test_single_error_result_exits_nonzero(configs_dir: Path) -> None:
+    fail_result = Result(
+        status_code=500,
+        body=None,
+        extracted=None,
+        is_success=False,
+        error="Internal Server Error",
+    )
+    runner = CliRunner()
+    with patch(
+        "yapilet.cli.main.make_single_usecase"
+    ) as mock_make_uc:
+        mock_uc = MagicMock()
+        mock_uc.run.return_value = fail_result
+        mock_make_uc.return_value = mock_uc
+        result = runner.invoke(
+            cli,
+            ["single", str(configs_dir / "singles" / "echo.yaml"), "--mock-echo"],
+        )
+    assert result.exit_code != 0
+
+
+def test_action_step_error_exits_nonzero(configs_dir: Path) -> None:
+    fail_result = Result(
+        status_code=500,
+        body=None,
+        extracted=None,
+        is_success=False,
+        error="step failed",
+    )
+    runner = CliRunner()
+    with patch(
+        "yapilet.cli.main.make_action_usecase"
+    ) as mock_make_uc:
+        mock_uc = MagicMock()
+        mock_uc.run.return_value = [fail_result, fail_result]  # 2 steps to match chain length
+        mock_make_uc.return_value = mock_uc
+        result = runner.invoke(
+            cli,
+            ["action", str(configs_dir / "actions" / "echo_chain.yaml"), "--mock-echo"],
+        )
+    assert result.exit_code != 0
