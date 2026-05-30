@@ -1,0 +1,14 @@
+title: "groq_model_list"
+note: |
+  Get Groq Model list
+  Usage: yapilet chat configs/singles/groq_model_list.yaml --api-key $GROQ_API_KEY
+single_config:
+  method: GET
+  uri: https://api.groq.com/openai/v1/models
+  header_df:
+    - Property: Content-Type
+      Value: application/json
+    - Property: Authorization
+      Value: "Bearer ＜API_KEY＞"
+  req_body: null
+  # user_property_path: data[*].id
