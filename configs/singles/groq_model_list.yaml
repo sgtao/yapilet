@@ -11,4 +11,4 @@ single_config:
     - Property: Authorization
       Value: "Bearer ＜API_KEY＞"
   req_body: null
-  # user_property_path: data[*].id
+  user_property_path: data[*].id
