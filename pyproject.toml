@@ -9,11 +9,13 @@ requires-python = ">=3.13"
 members = [
     "core",
     "cli",
+    "gui",
 ]
 
 [tool.uv.sources]
 yapilet-core = { workspace = true }
 yapilet-cli = { workspace = true }
+yapilet-gui = { workspace = true }
 
 [dependency-groups]
 dev = [
@@ -35,10 +37,10 @@ python_version = "3.13"
 strict = true
 namespace_packages = true
 explicit_package_bases = true
-mypy_path = "core/src"
+mypy_path = "core/src:cli/src:gui/src"
 
 [[tool.mypy.overrides]]
-module = ["yaml", "jmespath", "click"]
+module = ["yaml", "jmespath", "click", "flet.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
