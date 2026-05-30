@@ -108,11 +108,61 @@ step 1 (echo): hello
 step 2 (echo): hello
 ```
 
+### Interactive Chat
+
+```bash
+yapilet chat <path-to-yaml> [OPTIONS]
+```
+
+Opens an interactive multi-turn conversation. The YAML must be a `single_config:` whose body contains a `messages` array (seed messages: system prompt, example turns, etc.). Each user input is appended as `{"role": "user"}` and the assistant reply is added back before the next turn.
+
+```bash
+# Chat with a real API (Groq example)
+yapilet chat configs/messages/groq_chat.yaml --api-key $GROQ_API_KEY
+
+# Offline smoke test
+yapilet chat configs/singles/echo_chat.yaml --mock-echo
+```
+
+Session:
+```
+Chat started. Type 'exit' or press Ctrl+C to quit.
+> こんにちは
+どのようなご質問がありますか？
+> Python とは何ですか？
+Python は高水準プログラミング言語で...
+> exit
+Goodbye.
+```
+
+#### Chat Config Format
+
+Use any `single_config:` that has a `messages` array in the body:
+
+```yaml
+title: "my_chat"
+single_config:
+  method: POST
+  uri: "https://api.groq.com/openai/v1/chat/completions"
+  header_df:
+    - Property: Authorization
+      Value: "Bearer ＜API_KEY＞"
+  req_body:
+    model: "llama-3.1-8b-instant"
+    messages:
+      - role: "system"
+        content: "You are a helpful assistant."
+  user_property_path: "choices[0].message.content"
+```
+
+- The `messages` array is the **seed** (system prompt, example turns). User/assistant messages are appended automatically during the session.
+- `response_path` / `user_property_path` controls how the assistant reply is extracted from the response.
+
 ### Options
 
 | Option | Description |
 |---|---|
-| `--user-input TEXT` | User input (repeatable) |
+| `--user-input TEXT` | User input (repeatable, for `single` and `action` commands) |
 | `--api-key TEXT` | API key (falls back to `API_KEY` env var) |
 | `--mock-echo` | Use MockAdapter — echo request offline |
 
@@ -178,6 +228,38 @@ results = action_uc.run(
 for i, r in enumerate(results, start=1):
     print(f"step {i}: extracted={r.extracted}, success={r.is_success}")
 ```
+
+### Multi-turn Chat
+
+```python
+from yapilet.core.application.execute_chat import ExecuteChatUseCase
+from yapilet.core.infrastructure.mock_adapter import MockAdapter  # Use HttpxAdapter in production
+from yapilet.core.services.config_loader import ConfigLoader
+
+uc = ExecuteChatUseCase(
+    http_port=MockAdapter(),
+    config_loader=ConfigLoader(),
+)
+
+uc.load("configs/singles/echo_chat.yaml")
+
+response = uc.send("Hello!", api_key="sk-demo")
+print(response)  # → "Hello!"
+
+response2 = uc.send("How are you?", api_key="sk-demo")
+print(response2)  # → "How are you?"
+
+print(uc.history)
+# → [
+#     {"role": "system", "content": "You are helpful."},
+#     {"role": "user",   "content": "Hello!"},
+#     {"role": "assistant", "content": "Hello!"},
+#     {"role": "user",   "content": "How are you?"},
+#     {"role": "assistant", "content": "How are you?"},
+#   ]
+```
+
+`ExecuteChatUseCase` is stateful: call `load()` once, then `send()` for each turn. Conversation history is maintained in memory for the lifetime of the object.
 
 ### Result Object Fields
 

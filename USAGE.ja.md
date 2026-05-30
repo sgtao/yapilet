@@ -99,11 +99,63 @@ step 1 (echo): hello
 step 2 (echo): hello
 ```
 
+### 対話型チャット
+
+```bash
+yapilet chat <設定ファイルのパス> [オプション]
+```
+
+マルチターンの対話セッションを開きます。YAML は `single_config:` 形式で、body に `messages` 配列（シードメッセージ：system prompt、会話例など）を含む必要があります。ユーザーの入力は `{"role": "user"}` として末尾に追加され、assistant の返答が追記されてから次のターンに進みます。
+
+```bash
+# 実際の API で対話（Groq の例）
+yapilet chat configs/messages/groq_chat.yaml --api-key $GROQ_API_KEY
+
+# オフライン動作確認
+yapilet chat configs/singles/echo_chat.yaml --mock-echo
+```
+
+セッション例：
+```
+Chat started. Type 'exit' or press Ctrl+C to quit.
+> こんにちは
+どのようなご質問がありますか？
+> Python とは何ですか？
+Python は高水準プログラミング言語で...
+> exit
+Goodbye.
+```
+
+#### チャット設定ファイルの書き方
+
+body に `messages` 配列を持つ `single_config:` をそのまま使います：
+
+```yaml
+title: "groq_chat"
+single_config:
+  method: POST
+  uri: "https://api.groq.com/openai/v1/chat/completions"
+  header_df:
+    - Property: Authorization
+      Value: "Bearer ＜API_KEY＞"
+  req_body:
+    model: "llama-3.1-8b-instant"
+    messages:
+      - role: "system"
+        content: "あなたは聡明なAIです。"
+      - role: "assistant"
+        content: "了解です。どのような質問がありますか？"
+  user_property_path: "choices[0].message.content"
+```
+
+- `messages` 配列がシード（system prompt、会話例）として機能します。セッション中のユーザー/assistant メッセージは自動的に追記されます。
+- `response_path` / `user_property_path` でレスポンスから assistant の返答を抽出します。
+
 ### オプション一覧
 
 | オプション | 説明 |
 |---|---|
-| `--user-input TEXT` | ユーザー入力（複数回指定可） |
+| `--user-input TEXT` | ユーザー入力（`single` / `action` コマンドで使用、複数回指定可） |
 | `--api-key TEXT` | API キー（省略時は `API_KEY` 環境変数） |
 | `--mock-echo` | MockAdapter 使用（HTTP を送らずリクエストを echo） |
 
@@ -169,6 +221,33 @@ results = action_uc.run(
 for i, r in enumerate(results, start=1):
     print(f"step {i}: extracted={r.extracted}, success={r.is_success}")
 ```
+
+### マルチターンチャット
+
+```python
+from yapilet.core.application.execute_chat import ExecuteChatUseCase
+from yapilet.core.infrastructure.mock_adapter import MockAdapter  # 本番は HttpxAdapter
+from yapilet.core.services.config_loader import ConfigLoader
+
+uc = ExecuteChatUseCase(
+    http_port=MockAdapter(),
+    config_loader=ConfigLoader(),
+)
+
+uc.load("configs/singles/echo_chat.yaml")
+
+response = uc.send("こんにちは！", api_key="sk-demo")
+print(response)  # → "こんにちは！"
+
+print(uc.history)
+# → [
+#     {"role": "system",    "content": "You are helpful."},
+#     {"role": "user",      "content": "こんにちは！"},
+#     {"role": "assistant", "content": "こんにちは！"},
+#   ]
+```
+
+`ExecuteChatUseCase` は stateful です。`load()` を一度呼んでからターンごとに `send()` を呼びます。会話履歴はオブジェクトが生きている間メモリ上に保持されます。
 
 ### Result オブジェクトのフィールド
 
