@@ -34,6 +34,7 @@ mise run build      # Build wheels (dist/)
 mise run cli:single # CLI smoke test (single request)
 mise run cli:action # CLI smoke test (action chain)
 mise run cli:chat   # CLI smoke test (interactive chat, single turn)
+mise run gui:start  # Launch Flet desktop GUI
 ```
 
 ---

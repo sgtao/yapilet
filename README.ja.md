@@ -34,6 +34,7 @@ mise run build      # wheel ビルド（dist/）
 mise run cli:single # CLI スモークテスト（single）
 mise run cli:action # CLI スモークテスト（action）
 mise run cli:chat   # CLI スモークテスト（対話チャット、1ターン）
+mise run gui:start  # Flet デスクトップ GUI を起動
 ```
 
 ---

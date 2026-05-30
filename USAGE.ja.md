@@ -58,6 +58,30 @@ action_config:
 
 ---
 
+## GUI での使い方（デスクトップアプリ）
+
+```bash
+mise run gui:start
+# または
+yapilet-gui
+```
+
+Flet デスクトップウィンドウが起動し、4 つのタブが使えます：
+
+| タブ | 機能 |
+|---|---|
+| **Single** | `configs/singles/*.yaml` を選んで、ユーザー入力を入力してリクエストを実行 |
+| **Chat** | チャット設定（`body.messages` を持つ config）を選んでマルチターン対話 |
+| **Action** | `configs/actions/*.yaml` を選んでチェーンを実行、ステップごとの結果を確認 |
+| **Settings** | API Key と Mock Echo モードの設定 |
+
+**Settings の挙動:**
+- API Key は次のリクエストからすぐ反映（再 Load 不要）
+- Mock Echo の変更は次の **[Load]** 時に反映（チャット履歴は seed messages にリセット）
+- `API_KEY` 環境変数が設定済みの場合は API Key フィールドを空白のままで OK
+
+---
+
 ## CLI での使い方
 
 ### 単発リクエスト

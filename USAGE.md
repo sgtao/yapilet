@@ -67,6 +67,30 @@ action_config:
 
 ---
 
+## GUI Usage (Desktop App)
+
+```bash
+mise run gui:start
+# or
+yapilet-gui
+```
+
+Launches a Flet desktop window with four tabs:
+
+| Tab | Function |
+|---|---|
+| **Single** | Select a `configs/singles/*.yaml`, enter user inputs, run the request |
+| **Chat** | Select a chat config (with `body.messages`), start a multi-turn session |
+| **Action** | Select a `configs/actions/*.yaml`, run the chain, see per-step results |
+| **Settings** | Set API Key and toggle Mock Echo mode |
+
+**Settings notes:**
+- API Key is applied to every request immediately (no reload needed)
+- Mock Echo change takes effect on the next **[Load]** (chat history resets to seed messages)
+- If `API_KEY` environment variable is set, leave the API Key field empty
+
+---
+
 ## CLI Usage
 
 ### Single Request
