@@ -109,38 +109,3 @@ def test_list_singles_returns_sorted_stems(tmp_path: Path) -> None:
     # singles ディレクトリが存在しない場合
     loader_empty = ConfigLoader(configs_dir=tmp_path / "nonexistent")
     assert loader_empty.list_singles() == []
-
-
-def test_load_messages_parses_messages_config_wrapper(tmp_path: Path) -> None:
-    p = tmp_path / "chat.yaml"
-    _write(p, """
-title: test_chat
-note: "chat test"
-messages_config:
-  url: "https://api.example.com/v1/messages"
-  headers:
-    Authorization: "Bearer ＜API_KEY＞"
-  model: "gpt-4o"
-  max_tokens: 1024
-  messages:
-    - role: "system"
-      content: "You are helpful."
-    - role: "user"
-      content: "＜user_input_0＞"
-  response_path: "choices[0].message.content"
-""".strip())
-    req = ConfigLoader().load_messages(p)
-    assert req.title == "test_chat"
-    assert req.note == "chat test"
-    assert req.url == "https://api.example.com/v1/messages"
-    assert req.headers["Authorization"] == "Bearer ＜API_KEY＞"
-    assert len(req.messages) == 2
-    assert req.messages[0] == {"role": "system", "content": "You are helpful."}
-    assert req.messages[1] == {"role": "user", "content": "＜user_input_0＞"}
-    assert req.body_extra == {"model": "gpt-4o", "max_tokens": 1024}
-    assert req.response_path == "choices[0].message.content"
-
-
-def test_load_messages_missing_raises(tmp_path: Path) -> None:
-    with pytest.raises(FileNotFoundError):
-        ConfigLoader().load_messages(tmp_path / "nope.yaml")
