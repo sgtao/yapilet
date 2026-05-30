@@ -6,6 +6,7 @@ from typing import Any
 import yaml
 from yapilet.core.models.action_chain import ActionChain, ActionStep
 from yapilet.core.models.api_request import ApiRequest
+from yapilet.core.models.messages_request import MessagesRequest
 
 
 class ConfigLoader:
@@ -53,6 +54,35 @@ class ConfigLoader:
             for s in cfg.get("steps", [])
         ]
         return ActionChain(title=title, steps=steps, note=note)
+
+    def load_messages(self, path: Path) -> MessagesRequest:
+        """Load a messages_config YAML at `path` and return MessagesRequest."""
+        if not path.exists():
+            raise FileNotFoundError(f"Messages config not found: {path}")
+        with path.open("r", encoding="utf-8") as f:
+            raw: dict[str, Any] = yaml.safe_load(f) or {}
+
+        title = str(raw.get("title", path.stem))
+        note = str(raw.get("note", ""))
+        cfg: dict[str, Any] = raw.get("messages_config", {})
+
+        url = str(cfg.get("url") or cfg.get("uri", ""))
+        headers = self._parse_headers(cfg)
+        messages = [dict(m) for m in cfg.get("messages", [])]
+        response_path: str | None = cfg.get("response_path") or cfg.get("user_property_path")
+
+        _known = {"url", "uri", "headers", "header_df", "messages", "response_path", "user_property_path"}
+        body_extra: dict[str, Any] = {k: v for k, v in cfg.items() if k not in _known}
+
+        return MessagesRequest(
+            title=title,
+            note=note,
+            url=url,
+            headers=headers,
+            messages=messages,
+            body_extra=body_extra,
+            response_path=response_path,
+        )
 
     @staticmethod
     def _parse_headers(cfg: dict[str, Any]) -> dict[str, str]:
