@@ -9,7 +9,7 @@ from yapilet.core.application.execute_chat import ExecuteChatUseCase
 from yapilet.core.application.execute_single import ExecuteSingleUseCase
 from yapilet.core.infrastructure.httpx_adapter import HttpxAdapter
 from yapilet.core.infrastructure.mock_adapter import MockAdapter
-from yapilet.core.models.action_chain import ActionChain  # pages への re-export 用
+from yapilet.core.models.action_chain import ActionChain as ActionChain  # pages への re-export 用
 from yapilet.core.models.api_request import ApiRequest
 from yapilet.core.services.config_loader import ConfigLoader
 from yapilet.gui.app_store import AppStore

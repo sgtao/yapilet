@@ -4,6 +4,7 @@ from typing import cast
 
 import flet as ft
 from yapilet.gui.app_store import AppStore
+from yapilet.gui.pages.action_page import ActionPage
 from yapilet.gui.pages.settings_page import SettingsPage
 from yapilet.gui.pages.single_page import SinglePage
 
@@ -33,7 +34,7 @@ def main(page: ft.Page) -> None:
     pages: list[ft.Control] = [
         SinglePage(store),  # Task 4
         _PlaceholderPage("Chat"),  # Task 6 で置き換え
-        _PlaceholderPage("Action"),  # Task 5 で置き換え
+        ActionPage(store),  # Task 5
         SettingsPage(store),
     ]
     nav_labels = ["📝 Single", "💬 Chat", "🏃 Action", "⚙️ Settings"]
