@@ -1,6 +1,6 @@
 [project]
 name = "yapilet-core"
-version = "0.1.0"
+version = "0.1.1"
 description = "YAML-driven API request and action chain — core library"
 requires-python = ">=3.13"
 license = "Apache-2.0"
