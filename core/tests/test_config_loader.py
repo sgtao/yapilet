@@ -87,3 +87,25 @@ action_config:
 def test_load_action_missing_raises(tmp_path: Path) -> None:
     with pytest.raises(FileNotFoundError):
         ConfigLoader().load_action(tmp_path / "nope.yaml")
+
+
+def test_singles_dir_returns_path_when_configs_dir_is_set(tmp_path: Path) -> None:
+    loader = ConfigLoader(configs_dir=tmp_path)
+    assert loader.singles_dir == tmp_path / "singles"
+
+    loader_no_dir = ConfigLoader()
+    assert loader_no_dir.singles_dir is None
+
+
+def test_list_singles_returns_sorted_stems(tmp_path: Path) -> None:
+    singles = tmp_path / "singles"
+    singles.mkdir()
+    (singles / "beta.yaml").write_text("", encoding="utf-8")
+    (singles / "alpha.yaml").write_text("", encoding="utf-8")
+
+    loader = ConfigLoader(configs_dir=tmp_path)
+    assert loader.list_singles() == ["alpha", "beta"]
+
+    # singles ディレクトリが存在しない場合
+    loader_empty = ConfigLoader(configs_dir=tmp_path / "nonexistent")
+    assert loader_empty.list_singles() == []
