@@ -1,0 +1,23 @@
+title: "groq_chat"
+note: |
+  Groq / OpenAI-compatible chat completion.
+  Usage: yapilet chat configs/singles/groq_chat.yaml --api-key $GROQ_API_KEY
+  Supported models:
+    - llama-3.1-8b-instant
+    - openai/gpt-oss-20b
+single_config:
+  method: POST
+  uri: "https://api.groq.com/openai/v1/chat/completions"
+  header_df:
+    - Property: Content-Type
+      Value: application/json
+    - Property: Authorization
+      Value: "Bearer ＜API_KEY＞"
+  req_body:
+    model: "llama-3.1-8b-instant"
+    messages:
+      - role: "system"
+        content: "あなたは聡明なAIです。ユーザの入力に全て日本語で返答を生成してください。"
+      - role: "assistant"
+        content: "了解です。どのような質問がありますか？"
+  user_property_path: "choices[0].message.content"

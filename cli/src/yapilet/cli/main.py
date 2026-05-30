@@ -5,7 +5,12 @@ import sys
 from pathlib import Path
 
 import click
-from yapilet.cli._di import load_action_chain, make_action_usecase, make_chat_usecase, make_single_usecase
+from yapilet.cli._di import (
+    load_action_chain,
+    make_action_usecase,
+    make_chat_usecase,
+    make_single_usecase,
+)
 
 
 @click.group()

@@ -1,0 +1,11 @@
+title: "echo_chat"
+note: "Mock-friendly chat config for smoke testing with --mock-echo"
+single_config:
+  method: POST
+  url: "https://example.com/v1/chat/completions"
+  body:
+    model: "test-model"
+    messages:
+      - role: "system"
+        content: "You are helpful."
+  response_path: "echo.body.messages[-1].content"

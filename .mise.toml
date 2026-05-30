@@ -34,6 +34,10 @@ run = "uv run yapilet single configs/singles/echo.yaml --user-input hello --mock
 description = "CLI smoke test — action chain with mock-echo"
 run = "uv run yapilet action configs/actions/echo_chain.yaml --user-input hello --mock-echo"
 
+[tasks."cli:chat"]
+description = "CLI smoke test — interactive chat with mock-echo (single turn)"
+run = "printf 'hello\\nexit\\n' | uv run yapilet chat configs/singles/echo_chat.yaml --mock-echo"
+
 [tasks.build]
 description = "Build wheels for yapilet-core and yapilet-cli"
 run = "uv build --package yapilet-core && uv build --package yapilet-cli"
