@@ -45,3 +45,11 @@ run = "uv run yapilet-gui"
 [tasks.build]
 description = "Build wheels for yapilet-core and yapilet-cli"
 run = "uv build --package yapilet-core && uv build --package yapilet-cli"
+
+[tasks.clean]
+description = "Remove virtual environment and caches"
+run = "rm -rf .venv .pytest_cache .mypy_cache .ruff_cache **/__pycache__"
+
+[tasks.reset-venv]
+description = "Rebuild the virtual environment from scratch"
+run = "rm -rf .venv && uv sync --all-packages"
