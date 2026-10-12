@@ -3,8 +3,8 @@
   <defs>
     <!-- fluffy sponge texture -->
     <pattern id="cells" width="44" height="38" patternUnits="userSpaceOnUse">
-      <rect width="44" height="38" fill="#F6D98E"/>
-      <g fill="#FAE6AE" stroke="#E7BC57" stroke-width="2">
+      <rect width="44" height="38" fill="#FCE9B8"/>
+      <g fill="#F3CF7A" stroke="#E2AE43" stroke-width="1.8" stroke-linejoin="round">
         <path d="M3 4 h15 q4 0 4 4 v8 q0 4 -4 4 h-15 q-3 0 -3 -4 v-8 q0 -4 3 -4 z"/>
         <path d="M25 2 h14 q4 0 4 4 v10 q0 4 -4 4 h-14 q-3 0 -3 -4 v-10 q0 -4 3 -4 z"/>
         <path d="M12 23 h16 q4 0 4 4 v6 q0 4 -4 4 h-16 q-3 0 -3 -4 v-6 q0 -4 3 -4 z"/>
@@ -20,64 +20,65 @@
   <!-- ===== イラスト ===== -->
   <g transform="translate(-60 50) scale(0.82)">
 
-  <!-- 背面の生地 -->
-  <path d="M272 520 C200 502 158 425 160 340 C163 230 262 128 402 92 C505 66 625 68 704 104 L770 245 L450 345 Z" fill="#F5D58C"/>
-  <path d="M290 500 C228 478 190 412 192 345 C196 250 282 152 412 120 C505 98 612 100 690 122 L705 255 L410 445 Z" fill="url(#cells)"/>
-  <path d="M212 392 C220 440 255 472 300 482 C330 488 360 470 380 445 C330 455 260 440 212 392 Z" fill="#EDBE74" opacity="0.8"/>
-  <path d="M272 520 C200 502 158 425 160 340 C163 230 262 128 402 92 C505 66 625 68 704 104"
-        fill="none" stroke="#C98A2E" stroke-width="14" stroke-linecap="round"/>
-  <path d="M272 520 C200 502 158 425 160 340 C163 230 262 128 402 92 C505 66 625 68 704 104"
-        fill="none" stroke="#E0A84A" stroke-width="8" stroke-linecap="round"/>
+    <!-- 背面の生地 -->
+    <path d="M272 520 C200 502 158 425 160 340 C163 230 262 128 402 92 C505 66 625 68 704 104 L770 245 L866 302 C840 258 782 229 705 232 C605 236 522 266 455 342 C388 420 340 482 272 520 Z" fill="#F3C363"/>
+    <path d="M272 520 C200 502 158 425 160 340 C163 230 262 128 402 92 C505 66 625 68 704 104 L770 245 L450 345 Z" fill="#F3C363"/>
+    <path d="M290 500 C228 478 190 412 192 345 C196 250 282 152 412 120 C505 98 612 100 690 122 L705 255 L410 445 Z" fill="url(#cells)"/>
+    <path d="M212 392 C220 440 255 472 300 482 C330 488 360 470 380 445 C330 455 260 440 212 392 Z" fill="#E6AC50" opacity="0.85"/>
+    <path d="M272 520 C200 502 158 425 160 340 C163 230 262 128 402 92 C505 66 625 68 704 104"
+          fill="none" stroke="#B87B22" stroke-width="14" stroke-linecap="round"/>
+    <path d="M272 520 C200 502 158 425 160 340 C163 230 262 128 402 92 C505 66 625 68 704 104"
+          fill="none" stroke="#EBBF63" stroke-width="8" stroke-linecap="round"/>
 
-  <!-- クリーム（奥→手前） -->
-  <g stroke="#BBA67F" stroke-width="3">
-    <path d="M655 190 C655 145 690 118 718 112 C728 108 734 104 738 100 C740 106 746 110 755 112 C792 120 822 150 822 192 C822 232 785 262 738 262 C692 262 655 232 655 190 Z" fill="#FFFFFF"/>
-    <ellipse cx="600" cy="196" rx="84" ry="74" fill="#FFFFFF"/>
-    <ellipse cx="452" cy="238" rx="98" ry="80" fill="#FFFFFF"/>
-    <ellipse cx="300" cy="325" rx="96" ry="95" fill="#FFFFFF"/>
+    <!-- クリーム（奥→手前） -->
+    <g stroke="#CBB999" stroke-width="2.5" stroke-linejoin="round">
+      <path d="M655 190 C655 145 690 118 718 112 C728 108 734 104 738 100 C740 106 746 110 755 112 C792 120 822 150 822 192 C822 232 785 262 738 262 C692 262 655 232 655 190 Z" fill="#FFFFFF"/>
+      <ellipse cx="600" cy="196" rx="88" ry="78" fill="#FFFFFF"/>
+      <ellipse cx="452" cy="238" rx="102" ry="86" fill="#FFFFFF"/>
+      <ellipse cx="300" cy="325" rx="100" ry="98" fill="#FFFFFF"/>
+    </g>
+    <g fill="#FAF7F2">
+      <path d="M210 345 C222 390 258 418 300 420 C340 420 372 400 388 370 C350 395 260 400 210 345 Z"/>
+      <path d="M360 262 C380 298 420 316 455 316 C495 316 528 300 546 270 C505 292 410 296 360 262 Z"/>
+      <path d="M522 218 C540 252 572 268 602 268 C635 268 664 254 680 230 C645 250 570 252 522 218 Z"/>
+    </g>
+
+    <!-- トッピング：YAMLチップ -->
+    <g font-family="ui-monospace, Menlo, Consolas, monospace" font-size="17" font-weight="700" text-anchor="middle">
+      <g transform="rotate(-16 280 285)">
+        <rect x="236" y="270" width="88" height="30" rx="15" fill="#FFF8E3" stroke="#E3BA5B" stroke-width="2"/>
+        <text x="280" y="291" fill="#8C5C0F">- url</text>
+      </g>
+      <g transform="rotate(10 330 345)">
+        <rect x="276" y="330" width="108" height="30" rx="15" fill="#FFF8E3" stroke="#E3BA5B" stroke-width="2"/>
+        <text x="330" y="351" fill="#8C5C0F">- body</text>
+      </g>
+      <g transform="rotate(-8 450 215)">
+        <rect x="386" y="200" width="128" height="30" rx="15" fill="#FFF8E3" stroke="#E3BA5B" stroke-width="2"/>
+        <text x="450" y="221" fill="#8C5C0F">- method</text>
+      </g>
+      <g transform="rotate(12 595 170)">
+        <rect x="541" y="155" width="108" height="30" rx="15" fill="#FFF8E3" stroke="#E3BA5B" stroke-width="2"/>
+        <text x="595" y="176" fill="#8C5C0F">- steps</text>
+      </g>
+      <g transform="rotate(-18 735 160)">
+        <rect x="681" y="145" width="108" height="30" rx="15" fill="#FFF8E3" stroke="#E3BA5B" stroke-width="2"/>
+        <text x="735" y="166" fill="#8C5C0F">- {{N}}</text>
+      </g>
+    </g>
+
+    <!-- 手前の生地 -->
+    <use href="#flap" fill="url(#cells)"/>
+    <path d="M300 515 C390 505 480 478 570 444 C690 400 800 350 862 306
+             C845 340 712 404 568 454 C455 494 345 522 300 515 Z" fill="#E8B868" opacity="0.75"/>
+    <path d="M250 505 C335 480 385 420 452 342 C520 264 605 234 705 230 C782 227 838 254 864 300"
+          fill="none" stroke="#B87B22" stroke-width="24" stroke-linecap="round"/>
+    <path d="M250 505 C335 480 385 420 452 342 C520 264 605 234 705 230 C782 227 838 254 864 300"
+          fill="none" stroke="#F0C35B" stroke-width="16" stroke-linecap="round"/>
+    <path d="M272 520 C335 522 455 492 568 452 C712 402 845 335 866 302"
+          fill="none" stroke="#B87B22" stroke-width="6" stroke-linecap="round"/>
+
   </g>
-  <g fill="#F1ECE3">
-    <path d="M210 345 C222 390 258 418 300 420 C340 420 372 400 388 370 C350 395 260 400 210 345 Z"/>
-    <path d="M360 262 C380 298 420 316 455 316 C495 316 528 300 546 270 C505 292 410 296 360 262 Z"/>
-    <path d="M522 218 C540 252 572 268 602 268 C635 268 664 254 680 230 C645 250 570 252 522 218 Z"/>
-  </g>
-
-  <!-- トッピング：YAMLの「- key」チップ -->
-  <g font-family="ui-monospace, Menlo, Consolas, monospace" font-size="17" font-weight="700" text-anchor="middle">
-    <g transform="rotate(-18 280 285)">
-      <rect x="236" y="270" width="88" height="30" rx="15" fill="#FBEFC8" stroke="#DDB45C" stroke-width="2"/>
-      <text x="280" y="291" fill="#9A6A16">- url</text>
-    </g>
-    <g transform="rotate(12 330 345)">
-      <rect x="276" y="330" width="108" height="30" rx="15" fill="#FBEFC8" stroke="#DDB45C" stroke-width="2"/>
-      <text x="330" y="351" fill="#9A6A16">- body</text>
-    </g>
-    <g transform="rotate(-10 450 215)">
-      <rect x="386" y="200" width="128" height="30" rx="15" fill="#FBEFC8" stroke="#DDB45C" stroke-width="2"/>
-      <text x="450" y="221" fill="#9A6A16">- method</text>
-    </g>
-    <g transform="rotate(14 595 170)">
-      <rect x="541" y="155" width="108" height="30" rx="15" fill="#FBEFC8" stroke="#DDB45C" stroke-width="2"/>
-      <text x="595" y="176" fill="#9A6A16">- steps</text>
-    </g>
-    <g transform="rotate(-20 735 160)">
-      <rect x="681" y="145" width="108" height="30" rx="15" fill="#FBEFC8" stroke="#DDB45C" stroke-width="2"/>
-      <text x="735" y="166" fill="#9A6A16">- {{N}}</text>
-    </g>
-  </g>
-
-  <!-- 手前の生地 -->
-  <use href="#flap" fill="url(#cells)"/>
-  <path d="M300 515 C390 505 480 478 570 444 C690 400 800 350 862 306
-           C845 340 712 404 568 454 C455 494 345 522 300 515 Z" fill="#EDC27A" opacity="0.7"/>
-  <path d="M250 505 C335 480 385 420 452 342 C520 264 605 234 705 230 C782 227 838 254 864 300"
-        fill="none" stroke="#C98A2E" stroke-width="24" stroke-linecap="round"/>
-  <path d="M250 505 C335 480 385 420 452 342 C520 264 605 234 705 230 C782 227 838 254 864 300"
-        fill="none" stroke="#E3AD48" stroke-width="16" stroke-linecap="round"/>
-  <path d="M272 520 C335 522 455 492 568 452 C712 402 845 335 866 302"
-        fill="none" stroke="#C98A2E" stroke-width="6" stroke-linecap="round"/>
-
-    </g>
 
   <!-- ===== テキスト ===== -->
   <g font-family="'Helvetica Neue', Arial, sans-serif">
@@ -91,11 +92,10 @@
 
   <!-- 左上バッジ -->
   <g font-family="Georgia, 'Times New Roman', serif" font-weight="700" fill="#7C736B" text-anchor="middle">
-    <text x="92" y="52" font-size="18" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#C28A1E">---</text>
     <text x="92" y="82" font-size="28">YAML</text>
     <text x="92" y="112" font-size="28">Kitchen</text>
   </g>
 
   <!-- お菓子の右下：プロダクト名 -->
-  <text x="650" y="518" text-anchor="end" font-size="72" font-weight="700" fill="#B58348" font-family="ui-monospace, Menlo, Consolas, monospace">yapilet</text>
+  <text x="650" y="518" text-anchor="end" font-size="72" font-weight="700" fill="#A4723B" font-family="ui-monospace, Menlo, Consolas, monospace">yapilet</text>
 </svg>

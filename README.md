@@ -1,7 +1,7 @@
 **English** | [日本語](README.ja.md)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/sgtao/yapilet/main/logo.svg" alt="yapilet — Requests &amp; action chains, wrapped in YAML" width="600">
+  <img src="https://raw.githubusercontent.com/sgtao/yapilet/main/banner.svg" alt="yapilet — Requests &amp; action chains, wrapped in YAML" width="600">
 </p>
 
 # yapilet
