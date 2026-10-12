@@ -1,3 +1,9 @@
+[English](README.md) | **日本語**
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/sgtao/yapilet/main/logo.svg" alt="yapilet — Requests &amp; action chains, wrapped in YAML" width="600">
+</p>
+
 # yapilet
 
 YAML ファイルで API リクエストとアクションチェーンを定義・実行する Python ツールキット。
